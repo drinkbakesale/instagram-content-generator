@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Content Generator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0D3B4C;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        header p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            border-radius: 8px;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .tab.active {
+            background: #E67E22;
+            color: #fff;
+        }
+
+        .tab.completed {
+            background: rgba(39, 174, 96, 0.3);
+            color: #27ae60;
+        }
+
+        .tab.completed.active {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .tab .step-num {
+            background: rgba(0,0,0,0.2);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .panel {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-header h2 {
+            font-size: 1.4rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-header .badge {
+            background: #E67E22;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        /* Prompt Button */
+        .prompt-btn {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .prompt-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .prompt-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Prompt Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #1B4D5C;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.2rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-body textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            resize: vertical;
+        }
+
+        .modal-body textarea:focus {
+            outline: none;
+            border-color: #E67E22;
+        }
+
+        .modal-body p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #E67E22;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #d35400;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        /* Form Elements */
+        input[type="text"], input[type="number"] {
+            padding: 12px 16px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Post Grid */
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .post-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .post-card:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        .post-card.selected {
+            border: 2px solid #E67E22;
+        }
+
+        .post-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .post-card .type-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #1B4D5C;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            margin-bottom: 10px;
+        }
+
+        .post-card p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .checkbox-wrapper {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        /* Copy Options */
+        .copy-options {
+            display: grid;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .copy-option {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .copy-option:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .copy-option.selected {
+            border-color: #E67E22;
+            background: rgba(230, 126, 34, 0.1);
+        }
+
+        .copy-option h4 {
+            color: #E67E22;
+            margin-bottom: 5px;
+        }
+
+        .copy-option .subheadline {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 10px;
+        }
+
+        .copy-option .caption {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Image Grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .image-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            cursor: pointer;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-card .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 15px;
+        }
+
+        .image-card .overlay p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* Summary Box */
+        .summary-box {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: #E67E22;
+            transition: width 0.3s;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .status-message.success {
+            background: rgba(39, 174, 96, 0.2);
+            border: 1px solid #27ae60;
+        }
+
+        .status-message.error {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+        }
+
+        /* Stats */
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.08);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #E67E22;
+        }
+
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+            margin-top: 5px;
+        }
+
+        /* Select All Bar */
+        .select-all-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Drop Zone Styles */
+        .drop-zone {
+            border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #E67E22;
+            background: rgba(230, 126, 34, 0.1);
+        }
+
+        .drop-zone-content {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .drop-zone-content svg {
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .drop-zone-content p {
+            margin: 5px 0;
+        }
+
+        /* Photo Card in Grid */
+        .photo-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-card .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            padding: 10px;
+            font-size: 0.75rem;
+        }
+
+        .photo-card .photo-category {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #E67E22;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-bottom: 5px;
+        }
+
+        .photo-card .photo-tags {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.7rem;
+        }
+
+        .photo-card .photo-remove {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background: rgba(231, 76, 60, 0.9);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .photo-card:hover .photo-remove {
+            opacity: 1;
+        }
+
+        /* Brand Doc Item */
+        .brand-doc-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .brand-doc-item svg {
+            flex-shrink: 0;
+            opacity: 0.7;
+        }
+
+        .brand-doc-item .doc-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .brand-doc-item .doc-status {
+            font-size: 0.8rem;
+            color: #27ae60;
+        }
+
+        .brand-doc-item .doc-remove {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .brand-doc-item .doc-remove:hover {
+            color: #e74c3c;
+        }
+
+        /* Navigation Footer */
+        .nav-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .post-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Instagram Content Generator</h1>
+            <p>Create 30 days of branded Instagram content powered by AI</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab active" data-tab="1" onclick="switchTab(1)">
+                <span class="step-num">1</span>
+                Data Input
+            </button>
+            <button class="tab" data-tab="2" onclick="switchTab(2)">
+                <span class="step-num">2</span>
+                Content Strategy
+            </button>
+            <button class="tab" data-tab="3" onclick="switchTab(3)">
+                <span class="step-num">3</span>
+                Approve Concepts
+            </button>
+            <button class="tab" data-tab="4" onclick="switchTab(4)">
+                <span class="step-num">4</span>
+                Generate Copy
+            </button>
+            <button class="tab" data-tab="5" onclick="switchTab(5)">
+                <span class="step-num">5</span>
+                Approve Copy
+            </button>
+            <button class="tab" data-tab="6" onclick="switchTab(6)">
+                <span class="step-num">6</span>
+                Generate Images
+            </button>
+            <button class="tab" data-tab="7" onclick="switchTab(7)">
+                <span class="step-num">7</span>
+                Final Review
+            </button>
+        </div>
+
+        <!-- Tab 1: Data Input -->
+        <div class="tab-content active" id="tab-1">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Data Input</h2>
+                </div>
+
+                <!-- Website Analysis Section -->
+                <div style="margin-bottom: 30px;">
+                    <h3 style="margin-bottom: 15px; color: #E67E22;">Website Analysis</h3>
+                    <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7);">
+                        Enter the website URL to scrape and analyze content for your Instagram strategy.
+                    </p>
+                    <div class="form-group">
+                        <label>Website URL</label>
+                        <input type="text" id="website-url" value="https://projectruth.net/" placeholder="https://example.com">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="scrapeWebsite()">
+                            Analyze Website
+                        </button>
+                    </div>
+                    <div id="scrape-result" class="hidden" style="margin-top: 20px;">
+                        <h4 style="margin-bottom: 10px;">Website Analysis Results</h4>
+                        <div class="summary-box" id="website-summary"></div>
+                    </div>
+                </div>
+
+                <!-- Brand Documents Section -->
+                <div style="margin-bottom: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <h3 style="margin-bottom: 15px; color: #E67E22;">Brand Documents</h3>
+                    <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7);">
+                        Upload brand guidelines, style guides, or other documents to help craft brand voice and content rules.
+                    </p>
+                    <div class="drop-zone" id="brand-docs-dropzone"
+                         ondrop="handleBrandDocsDrop(event)"
+                         ondragover="handleDragOver(event)"
+                         ondragleave="handleDragLeave(event)">
+                        <div class="drop-zone-content">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="12" y1="18" x2="12" y2="12"></line>
+                                <line x1="9" y1="15" x2="15" y2="15"></line>
+                            </svg>
+                            <p>Drag & drop brand documents here</p>
+                            <p style="font-size: 0.8rem; opacity: 0.6;">PDF, DOC, DOCX, TXT</p>
+                        </div>
+                        <input type="file" id="brand-docs-input" multiple accept=".pdf,.doc,.docx,.txt" style="display:none" onchange="handleBrandDocsSelect(event)">
+                    </div>
+                    <div id="brand-docs-list" style="margin-top: 15px;"></div>
+                    <div id="brand-voice-result" class="hidden" style="margin-top: 20px;">
+                        <h4 style="margin-bottom: 10px;">Brand Voice Analysis</h4>
+                        <div class="summary-box" id="brand-voice-summary"></div>
+                    </div>
+                </div>
+
+                <!-- Import Photos Section -->
+                <div style="margin-bottom: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <h3 style="margin-bottom: 15px; color: #E67E22;">Import Photos</h3>
+                    <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7);">
+                        Upload photos to use in posts. Each photo will be analyzed and categorized for matching with content.
+                    </p>
+                    <div class="drop-zone" id="photos-dropzone"
+                         ondrop="handlePhotosDrop(event)"
+                         ondragover="handleDragOver(event)"
+                         ondragleave="handleDragLeave(event)">
+                        <div class="drop-zone-content">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                            <p>Drag & drop photos here</p>
+                            <p style="font-size: 0.8rem; opacity: 0.6;">JPG, PNG, WEBP</p>
+                        </div>
+                        <input type="file" id="photos-input" multiple accept="image/*" style="display:none" onchange="handlePhotosSelect(event)">
+                    </div>
+                    <div id="photos-grid" class="image-grid" style="margin-top: 15px;"></div>
+                    <div id="photos-count" style="margin-top: 10px; color: rgba(255,255,255,0.6);"></div>
+                </div>
+
+                <div class="nav-footer" id="nav-1" style="display: none;">
+                    <div></div>
+                    <button class="btn btn-primary" onclick="switchTab(2)">Next: Content Strategy &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Content Strategy -->
+        <div class="tab-content" id="tab-2">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Generate Content Strategy <span class="badge">30 Posts</span></h2>
+                    <button class="prompt-btn" onclick="openPromptEditor('content_strategy')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Edit Prompt
+                    </button>
+                </div>
+                <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7);">
+                    Generate a content strategy with Instagram post concepts based on the website analysis.
+                </p>
+                <div class="form-group">
+                    <label>Number of posts</label>
+                    <input type="number" id="num-posts" value="30" min="1" max="100">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="generate-strategy-btn" onclick="generateStrategy()">
+                        Generate Content Strategy
+                    </button>
+                </div>
+                <div id="strategy-loading" class="hidden" style="margin-top: 20px;">
+                    <span class="loading"></span> Generating content strategy...
+                </div>
+                <div class="nav-footer">
+                    <button class="btn btn-secondary" onclick="switchTab(1)">&larr; Back</button>
+                    <button class="btn btn-primary" onclick="switchTab(3)" id="to-concepts-btn" disabled>Next: Approve Concepts &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Approve Concepts -->
+        <div class="tab-content" id="tab-3">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Review & Approve Concepts</h2>
+                </div>
+                <div class="select-all-bar">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="select-all-concepts" onchange="toggleAllConcepts()">
+                        <label for="select-all-concepts">Select All</label>
+                        <span id="selected-count">(0 selected)</span>
+                    </div>
+                    <button class="btn btn-primary" onclick="approveConcepts()">
+                        Approve Selected
+                    </button>
+                </div>
+                <div class="post-grid" id="concepts-grid"></div>
+                <div class="nav-footer">
+                    <button class="btn btn-secondary" onclick="switchTab(2)">&larr; Back</button>
+                    <button class="btn btn-primary" onclick="switchTab(4)" id="to-copy-btn" disabled>Next: Generate Copy &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Generate Copy -->
+        <div class="tab-content" id="tab-4">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Generate Copy</h2>
+                    <button class="prompt-btn" onclick="openPromptEditor('copy_generator')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Edit Prompt
+                    </button>
+                </div>
+                <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7);">
+                    Generate headline, subheadline, and caption options for each approved concept.
+                </p>
+                <div class="btn-group" style="margin-bottom: 20px;">
+                    <button class="btn btn-primary" onclick="generateAllCopy()">
+                        Generate Copy for All
+                    </button>
+                </div>
+                <div id="copy-loading" class="hidden">
+                    <span class="loading"></span> Generating copy options...
+                </div>
+                <div id="copy-generation-container"></div>
+                <div class="nav-footer">
+                    <button class="btn btn-secondary" onclick="switchTab(3)">&larr; Back</button>
+                    <button class="btn btn-primary" onclick="switchTab(5)" id="to-approve-copy-btn">Next: Approve Copy &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 5: Approve Copy -->
+        <div class="tab-content" id="tab-5">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Approve Copy</h2>
+                </div>
+                <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7);">
+                    Select your preferred copy option for each concept. Click on an option to select it.
+                </p>
+                <div id="copy-approval-container"></div>
+                <div class="nav-footer">
+                    <button class="btn btn-secondary" onclick="switchTab(4)">&larr; Back</button>
+                    <button class="btn btn-primary" onclick="switchTab(6)" id="to-images-btn">Next: Generate Images &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 6: Generate Images -->
+        <div class="tab-content" id="tab-6">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Generate Images</h2>
+                    <button class="prompt-btn" onclick="openPromptEditor('image_prompt')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Edit Image Prompt
+                    </button>
+                </div>
+                <div class="stat-cards">
+                    <div class="stat-card">
+                        <div class="number" id="images-generated">0</div>
+                        <div class="label">Generated</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number" id="images-total">0</div>
+                        <div class="label">Total</div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="fill" id="image-progress" style="width: 0%"></div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 8px; color: rgba(255,255,255,0.8);">Template Style:</label>
+                    <select id="template-select" style="padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; width: 100%; max-width: 300px;">
+                        <option value="top_bar">Top Bar</option>
+                        <option value="bottom_bar">Bottom Bar</option>
+                        <option value="left_sidebar">Left Sidebar</option>
+                        <option value="center_circle">Center Circle</option>
+                        <option value="full_text">Full Text Overlay</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="generate-images-btn" onclick="generateAllImages()">
+                        Generate All Images
+                    </button>
+                    <button class="prompt-btn" onclick="openPromptEditor('text_placement')" style="margin-left: auto;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Edit Text Overlay Prompt
+                    </button>
+                </div>
+                <div id="image-status" style="margin-top: 20px;"></div>
+                <div class="nav-footer">
+                    <button class="btn btn-secondary" onclick="switchTab(5)">&larr; Back</button>
+                    <button class="btn btn-primary" onclick="switchTab(7)">Next: Final Review &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 7: Final Review -->
+        <div class="tab-content" id="tab-7">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Final Review</h2>
+                </div>
+                <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7);">
+                    Review all generated content. Click any image to view full size.
+                </p>
+                <div class="btn-group" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" onclick="refreshFinalGrid()">
+                        Refresh Grid
+                    </button>
+                </div>
+                <div class="image-grid" id="final-grid"></div>
+                <div class="nav-footer">
+                    <button class="btn btn-secondary" onclick="switchTab(6)">&larr; Back</button>
+                    <button class="btn btn-success" onclick="downloadAll()">
+                        Download All Images
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prompt Editor Modal -->
+    <div class="modal-overlay" id="prompt-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="prompt-modal-title">Edit Prompt</h3>
+                <button class="modal-close" onclick="closePromptEditor()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="prompt-modal-description">Edit the prompt below. Changes will be saved and used for future generations.</p>
+                <textarea id="prompt-editor"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePromptEditor()">Cancel</button>
+                <button class="btn btn-primary" onclick="savePrompt()">Save Prompt</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let state = {
+            websiteContent: null,
+            contentStrategy: [],
+            approvedConcepts: [],
+            copyOptions: {},
+            approvedCopy: {},
+            generatedImages: {},
+            finalImages: {},
+            currentTab: 1
+        };
+
+        let currentPromptKey = null;
+
+        // Load saved state on page load
+        document.addEventListener('DOMContentLoaded', loadState);
+
+        async function loadState() {
+            try {
+                const response = await fetch('/api/full-state');
+                const data = await response.json();
+
+                if (data.success && data.data) {
+                    const d = data.data;
+                    state.websiteContent = d.website_content;
+                    state.contentStrategy = d.content_strategy || [];
+                    state.approvedConcepts = d.approved_concepts || [];
+                    state.copyOptions = d.copy_options || {};
+                    state.approvedCopy = d.approved_copy || {};
+                    state.generatedImages = d.generated_images || {};
+                    state.finalImages = d.final_images || {};
+
+                    // Restore UI based on state
+                    restoreUI();
+                }
+            } catch (e) {
+                console.error('Error loading state:', e);
+            }
+        }
+
+        function restoreUI() {
+            // Tab 1: Website
+            if (state.websiteContent) {
+                document.getElementById('website-summary').textContent = state.websiteContent.summary || '';
+                document.getElementById('scrape-result').classList.remove('hidden');
+                document.getElementById('nav-1').style.display = 'flex';
+                markTabCompleted(1);
+            }
+
+            // Tab 2: Strategy
+            if (state.contentStrategy.length > 0) {
+                document.getElementById('to-concepts-btn').disabled = false;
+                markTabCompleted(2);
+            }
+
+            // Tab 3: Concepts
+            if (state.contentStrategy.length > 0) {
+                renderConceptsGrid(state.contentStrategy);
+            }
+            if (state.approvedConcepts.length > 0) {
+                document.getElementById('to-copy-btn').disabled = false;
+                markTabCompleted(3);
+                // Mark approved concepts as selected
+                state.approvedConcepts.forEach(c => {
+                    const checkbox = document.querySelector(`#check-${c.id}`);
+                    if (checkbox) checkbox.checked = true;
+                });
+                updateSelectedCount();
+            }
+
+            // Tab 4: Copy Generation
+            if (state.approvedConcepts.length > 0) {
+                renderCopyGenerationContainer();
+            }
+            if (Object.keys(state.copyOptions).length > 0) {
+                renderCopyOptionsInGeneration();
+                markTabCompleted(4);
+            }
+
+            // Tab 5: Copy Approval
+            if (Object.keys(state.copyOptions).length > 0) {
+                renderCopyApprovalContainer();
+            }
+            if (Object.keys(state.approvedCopy).length > 0) {
+                markApprovedCopyInUI();
+                markTabCompleted(5);
+            }
+
+            // Tab 6: Images
+            if (Object.keys(state.approvedCopy).length > 0) {
+                document.getElementById('images-total').textContent = Object.keys(state.approvedCopy).length;
+            }
+            if (Object.keys(state.finalImages).length > 0) {
+                document.getElementById('images-generated').textContent = Object.keys(state.finalImages).length;
+                const progress = (Object.keys(state.finalImages).length / Object.keys(state.approvedCopy).length) * 100;
+                document.getElementById('image-progress').style.width = `${progress}%`;
+                markTabCompleted(6);
+            }
+
+            // Tab 7: Final
+            if (Object.keys(state.finalImages).length > 0) {
+                refreshFinalGrid();
+                markTabCompleted(7);
+            }
+        }
+
+        function switchTab(tabNum) {
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tab[data-tab="${tabNum}"]`).classList.add('active');
+
+            // Update active content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`tab-${tabNum}`).classList.add('active');
+
+            state.currentTab = tabNum;
+
+            // Re-render content for specific tabs to ensure data is shown
+            if (tabNum === 5) {
+                renderCopyApprovalContainer();
+            } else if (tabNum === 7) {
+                refreshFinalGrid();
+            }
+        }
+
+        function markTabCompleted(tabNum) {
+            document.querySelector(`.tab[data-tab="${tabNum}"]`).classList.add('completed');
+        }
+
+        // Tab 1: Website Scraping
+        async function scrapeWebsite() {
+            const url = document.getElementById('website-url').value;
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Analyzing...';
+
+            try {
+                const response = await fetch('/api/scrape', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('website-summary').textContent = data.summary;
+                    document.getElementById('scrape-result').classList.remove('hidden');
+                    document.getElementById('nav-1').style.display = 'flex';
+                    state.websiteContent = { summary: data.summary };
+                    markTabCompleted(1);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = 'Analyze Website';
+        }
+
+        // Tab 2: Strategy Generation
+        async function generateStrategy() {
+            const numPosts = document.getElementById('num-posts').value;
+            const btn = document.getElementById('generate-strategy-btn');
+            btn.disabled = true;
+            document.getElementById('strategy-loading').classList.remove('hidden');
+
+            try {
+                const response = await fetch('/api/generate-strategy', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ num_posts: parseInt(numPosts) })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    state.contentStrategy = data.posts;
+                    renderConceptsGrid(data.posts);
+                    document.getElementById('to-concepts-btn').disabled = false;
+                    markTabCompleted(2);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+
+            btn.disabled = false;
+            document.getElementById('strategy-loading').classList.add('hidden');
+        }
+
+        // Tab 3: Concepts
+        function renderConceptsGrid(posts) {
+            const grid = document.getElementById('concepts-grid');
+            grid.innerHTML = posts.map(post => `
+                <div class="post-card" id="concept-${post.id}">
+                    <span class="type-badge">${post.type || 'General'}</span>
+                    <h3>${post.title || 'Post ' + post.id}</h3>
+                    <p><strong>Visual:</strong> ${post.visual || 'N/A'}</p>
+                    <p><strong>Message:</strong> ${post.message || 'N/A'}</p>
+                    <p><strong>Hashtags:</strong> ${post.hashtags || ''}</p>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="check-${post.id}" data-id="${post.id}" onchange="updateSelectedCount()">
+                        <label for="check-${post.id}">Select</label>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleAllConcepts() {
+            const selectAll = document.getElementById('select-all-concepts').checked;
+            document.querySelectorAll('#concepts-grid input[type="checkbox"]').forEach(cb => {
+                cb.checked = selectAll;
+            });
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            const selected = document.querySelectorAll('#concepts-grid input[type="checkbox"]:checked').length;
+            document.getElementById('selected-count').textContent = `(${selected} selected)`;
+        }
+
+        async function approveConcepts() {
+            const checkboxes = document.querySelectorAll('#concepts-grid input[type="checkbox"]:checked');
+            const approvedIds = Array.from(checkboxes).map(cb => parseInt(cb.dataset.id));
+
+            if (approvedIds.length === 0) {
+                alert('Please select at least one concept');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/approve-concepts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ approved_ids: approvedIds })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    state.approvedConcepts = data.approved_concepts;
+                    document.getElementById('to-copy-btn').disabled = false;
+                    markTabCompleted(3);
+                    renderCopyGenerationContainer();
+                    renderCopyApprovalContainer();
+                    alert(`${data.approved_count} concepts approved!`);
+                }
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        // Tab 4: Copy Generation
+        function renderCopyGenerationContainer() {
+            const container = document.getElementById('copy-generation-container');
+            container.innerHTML = state.approvedConcepts.map(concept => `
+                <div class="post-card" style="margin-bottom: 15px;" id="copy-gen-${concept.id}">
+                    <span class="type-badge">${concept.type}</span>
+                    <h3>${concept.title}</h3>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-secondary" id="gen-copy-btn-${concept.id}" onclick="generateSingleCopy(${concept.id}, this)">
+                            Generate Copy
+                        </button>
+                    </div>
+                    <div id="copy-status-${concept.id}" style="margin-top: 10px;"></div>
+                </div>
+            `).join('');
+        }
+
+        async function generateSingleCopy(conceptId, btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Generating...';
+
+            try {
+                const response = await fetch('/api/generate-copy', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ concept_id: conceptId })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    state.copyOptions[conceptId] = data.options;
+                    btn.innerHTML = '&#10003; Generated';
+                    btn.classList.remove('btn-secondary');
+                    btn.classList.add('btn-success');
+                    document.getElementById(`copy-status-${conceptId}`).innerHTML =
+                        `<span style="color: #27ae60;">3 copy options generated</span>`;
+                    renderCopyApprovalContainer();
+                } else {
+                    alert('Error: ' + data.error);
+                    btn.disabled = false;
+                    btn.innerHTML = 'Generate Copy';
+                }
+            } catch (e) {
+                alert('Error: ' + e.message);
+                btn.disabled = false;
+                btn.innerHTML = 'Generate Copy';
+            }
+        }
+
+        async function generateAllCopy() {
+            const btn = event.target;
+            btn.disabled = true;
+            document.getElementById('copy-loading').classList.remove('hidden');
+
+            try {
+                const response = await fetch('/api/generate-all-copy', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    state.copyOptions = data.copy_options;
+                    renderCopyOptionsInGeneration();
+                    renderCopyApprovalContainer();
+                    markTabCompleted(4);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+
+            btn.disabled = false;
+            document.getElementById('copy-loading').classList.add('hidden');
+        }
+
+        function renderCopyOptionsInGeneration() {
+            for (const conceptId of Object.keys(state.copyOptions)) {
+                const btn = document.getElementById(`gen-copy-btn-${conceptId}`);
+                if (btn) {
+                    btn.innerHTML = '&#10003; Generated';
+                    btn.classList.remove('btn-secondary');
+                    btn.classList.add('btn-success');
+                    btn.disabled = true;
+                }
+                const status = document.getElementById(`copy-status-${conceptId}`);
+                if (status) {
+                    status.innerHTML = `<span style="color: #27ae60;">3 copy options generated</span>`;
+                }
+            }
+        }
+
+        // Tab 5: Copy Approval
+        function renderCopyApprovalContainer() {
+            const container = document.getElementById('copy-approval-container');
+
+            // Debug logging
+            console.log('renderCopyApprovalContainer called');
+            console.log('approvedConcepts:', state.approvedConcepts);
+            console.log('copyOptions:', state.copyOptions);
+
+            // Handle both string and numeric keys
+            const conceptsWithCopy = state.approvedConcepts.filter(c =>
+                state.copyOptions[c.id] || state.copyOptions[String(c.id)]
+            );
+
+            console.log('conceptsWithCopy:', conceptsWithCopy);
+
+            if (conceptsWithCopy.length === 0) {
+                container.innerHTML = `
+                    <div class="post-card">
+                        <p style="color: rgba(255,255,255,0.6);">No copy options generated yet. Go to the "Generate Copy" tab first.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = conceptsWithCopy.map(concept => {
+                const options = state.copyOptions[concept.id] || state.copyOptions[String(concept.id)] || [];
+                const approved = state.approvedCopy[concept.id] || state.approvedCopy[String(concept.id)];
+
+                return `
+                    <div class="post-card" style="margin-bottom: 20px;">
+                        <span class="type-badge">${concept.type}</span>
+                        <h3>${concept.title}</h3>
+                        <div class="copy-options">
+                            ${options.map(opt => `
+                                <div class="copy-option ${approved && approved.id === opt.id ? 'selected' : ''}"
+                                     onclick="selectCopyOption(${concept.id}, ${opt.id}, this)">
+                                    <h4>${opt.headline}</h4>
+                                    <p class="subheadline">${opt.subheadline}</p>
+                                    <p class="caption">${opt.caption}</p>
+                                    <p style="margin-top: 10px; font-size: 0.8rem; color: #E67E22;">${opt.hashtags}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectCopyOption(conceptId, optionId, element) {
+            // Remove selection from siblings
+            element.parentElement.querySelectorAll('.copy-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+
+            // Store selection (handle both string and numeric keys)
+            const options = state.copyOptions[conceptId] || state.copyOptions[String(conceptId)] || [];
+            const selected = options.find(o => o.id === optionId);
+            state.approvedCopy[conceptId] = selected;
+
+            // Send to server
+            fetch('/api/approve-copy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ concept_id: conceptId, copy_option: selected })
+            });
+
+            // Update image total
+            document.getElementById('images-total').textContent = Object.keys(state.approvedCopy).length;
+
+            // Check if all copy is approved
+            if (Object.keys(state.approvedCopy).length > 0) {
+                markTabCompleted(5);
+            }
+        }
+
+        function markApprovedCopyInUI() {
+            // This is handled in renderCopyApprovalContainer by checking state.approvedCopy
+        }
+
+        // Tab 6: Image Generation
+        async function generateAllImages() {
+            const btn = document.getElementById('generate-images-btn');
+            btn.disabled = true;
+            btn.textContent = 'Generating...';
+
+            const conceptIds = Object.keys(state.approvedCopy).map(id => parseInt(id));
+            let completed = 0;
+
+            document.getElementById('image-status').innerHTML = '';
+
+            for (const conceptId of conceptIds) {
+                const statusEl = document.createElement('div');
+                statusEl.className = 'status-message';
+                statusEl.textContent = `Generating post ${conceptId}...`;
+                document.getElementById('image-status').appendChild(statusEl);
+
+                try {
+                    const template = document.getElementById('template-select').value;
+                    const response = await fetch('/api/generate-full-post', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ concept_id: conceptId, template: template })
+                    });
+                    const data = await response.json();
+
+                    if (data.success) {
+                        statusEl.className = 'status-message success';
+                        statusEl.textContent = `Post ${conceptId}: Generated successfully`;
+                        state.finalImages[conceptId] = data.final_image;
+                        completed++;
+                    } else {
+                        statusEl.className = 'status-message error';
+                        statusEl.textContent = `Post ${conceptId}: ${data.error}`;
+                    }
+                } catch (e) {
+                    statusEl.className = 'status-message error';
+                    statusEl.textContent = `Post ${conceptId}: ${e.message}`;
+                }
+
+                document.getElementById('images-generated').textContent = completed;
+                const progress = (completed / conceptIds.length) * 100;
+                document.getElementById('image-progress').style.width = `${progress}%`;
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Generate All Images';
+            markTabCompleted(6);
+            refreshFinalGrid();
+        }
+
+        // Tab 7: Final Grid
+        async function refreshFinalGrid() {
+            try {
+                const response = await fetch('/api/get-final-grid');
+                const data = await response.json();
+
+                if (data.success) {
+                    const grid = document.getElementById('final-grid');
+                    const timestamp = Date.now(); // Cache-busting
+                    grid.innerHTML = data.images.map(img => `
+                        <div class="image-card" onclick="window.open('/output/${img.filename}?t=${timestamp}', '_blank')">
+                            <img src="/output/${img.filename}?t=${timestamp}" alt="Post ${img.concept_id}" loading="lazy">
+                        </div>
+                    `).join('');
+
+                    if (data.count > 0) {
+                        markTabCompleted(7);
+                    }
+                }
+            } catch (e) {
+                console.error('Error refreshing grid:', e);
+            }
+        }
+
+        function downloadAll() {
+            alert('Images are saved in the output folder:\n~/instagram-content-generator/output/');
+        }
+
+        // Prompt Editor
+        async function openPromptEditor(promptKey) {
+            currentPromptKey = promptKey;
+
+            try {
+                const response = await fetch(`/api/prompts/${promptKey}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('prompt-modal-title').textContent = data.prompt.name;
+                    document.getElementById('prompt-modal-description').textContent = data.prompt.description;
+                    document.getElementById('prompt-editor').value = data.prompt.prompt;
+                    document.getElementById('prompt-modal').classList.add('active');
+                } else {
+                    alert('Error loading prompt: ' + data.error);
+                }
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        function closePromptEditor() {
+            document.getElementById('prompt-modal').classList.remove('active');
+            currentPromptKey = null;
+        }
+
+        async function savePrompt() {
+            if (!currentPromptKey) return;
+
+            const newPrompt = document.getElementById('prompt-editor').value;
+
+            try {
+                const response = await fetch(`/api/prompts/${currentPromptKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: newPrompt })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Prompt saved successfully!');
+                    closePromptEditor();
+                } else {
+                    alert('Error saving prompt: ' + data.error);
+                }
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        // Close modal on outside click
+        document.getElementById('prompt-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePromptEditor();
+            }
+        });
+
+        // ============ File Upload Handlers ============
+
+        // Make drop zones clickable
+        document.addEventListener('DOMContentLoaded', function() {
+            const brandDropzone = document.getElementById('brand-docs-dropzone');
+            const photosDropzone = document.getElementById('photos-dropzone');
+
+            if (brandDropzone) {
+                brandDropzone.onclick = () => document.getElementById('brand-docs-input').click();
+            }
+            if (photosDropzone) {
+                photosDropzone.onclick = () => document.getElementById('photos-input').click();
+            }
+
+            // Load existing photos
+            loadImportedPhotos();
+        });
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        // Brand Documents Handling
+        async function handleBrandDocsDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            await uploadBrandDocs(files);
+        }
+
+        async function handleBrandDocsSelect(e) {
+            const files = e.target.files;
+            await uploadBrandDocs(files);
+        }
+
+        async function uploadBrandDocs(files) {
+            const listEl = document.getElementById('brand-docs-list');
+
+            for (const file of files) {
+                // Add to UI immediately with loading state
+                const itemId = 'doc-' + Date.now();
+                listEl.innerHTML += `
+                    <div class="brand-doc-item" id="${itemId}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <span class="doc-name">${file.name}</span>
+                        <span class="doc-status"><span class="loading"></span> Analyzing...</span>
+                    </div>
+                `;
+
+                // Upload file
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const response = await fetch('/api/upload-brand-doc', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+
+                    const itemEl = document.getElementById(itemId);
+                    if (data.success) {
+                        itemEl.querySelector('.doc-status').innerHTML = '&#10003; Analyzed';
+                        // Show brand voice if available
+                        if (data.brand_voice) {
+                            document.getElementById('brand-voice-summary').textContent = data.brand_voice;
+                            document.getElementById('brand-voice-result').classList.remove('hidden');
+                        }
+                    } else {
+                        itemEl.querySelector('.doc-status').innerHTML = '<span style="color:#e74c3c;">Error</span>';
+                    }
+                } catch (e) {
+                    console.error('Upload error:', e);
+                }
+            }
+        }
+
+        // Photo Handling
+        async function handlePhotosDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            await uploadPhotos(files);
+        }
+
+        async function handlePhotosSelect(e) {
+            const files = e.target.files;
+            await uploadPhotos(files);
+        }
+
+        async function uploadPhotos(files) {
+            const gridEl = document.getElementById('photos-grid');
+            const countEl = document.getElementById('photos-count');
+
+            for (const file of files) {
+                if (!file.type.startsWith('image/')) continue;
+
+                // Create preview immediately
+                const photoId = 'photo-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    gridEl.innerHTML += `
+                        <div class="photo-card" id="${photoId}">
+                            <img src="${e.target.result}" alt="Uploaded photo">
+                            <div class="photo-overlay">
+                                <span class="photo-category">Analyzing...</span>
+                            </div>
+                            <button class="photo-remove" onclick="removePhoto('${photoId}')">&times;</button>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+
+                // Upload and analyze
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const response = await fetch('/api/upload-photo', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+
+                    // Wait a moment for the preview to be added
+                    setTimeout(() => {
+                        const cardEl = document.getElementById(photoId);
+                        if (cardEl && data.success) {
+                            cardEl.dataset.photoId = data.photo_id;
+                            cardEl.querySelector('.photo-overlay').innerHTML = `
+                                <span class="photo-category">${data.category || 'General'}</span>
+                                <div class="photo-tags">${(data.tags || []).slice(0, 3).join(', ')}</div>
+                            `;
+                        }
+                    }, 100);
+                } catch (e) {
+                    console.error('Photo upload error:', e);
+                }
+            }
+
+            updatePhotoCount();
+        }
+
+        async function loadImportedPhotos() {
+            try {
+                const response = await fetch('/api/get-imported-photos');
+                const data = await response.json();
+
+                if (data.success && data.photos) {
+                    const gridEl = document.getElementById('photos-grid');
+                    gridEl.innerHTML = data.photos.map(photo => `
+                        <div class="photo-card" data-photo-id="${photo.id}">
+                            <img src="/imported-photos/${photo.filename}" alt="${photo.category}">
+                            <div class="photo-overlay">
+                                <span class="photo-category">${photo.category || 'General'}</span>
+                                <div class="photo-tags">${(photo.tags || []).slice(0, 3).join(', ')}</div>
+                            </div>
+                            <button class="photo-remove" onclick="removePhoto('${photo.id}')">&times;</button>
+                        </div>
+                    `).join('');
+                    updatePhotoCount();
+                }
+            } catch (e) {
+                console.error('Error loading photos:', e);
+            }
+        }
+
+        function updatePhotoCount() {
+            const count = document.querySelectorAll('#photos-grid .photo-card').length;
+            document.getElementById('photos-count').textContent = count > 0 ? `${count} photo(s) imported` : '';
+        }
+
+        async function removePhoto(photoId) {
+            const card = document.getElementById(photoId) || document.querySelector(`[data-photo-id="${photoId}"]`);
+            if (card) {
+                card.remove();
+                updatePhotoCount();
+
+                // Also remove from server
+                try {
+                    await fetch('/api/remove-photo', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ photo_id: photoId })
+                    });
+                } catch (e) {
+                    console.error('Error removing photo:', e);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

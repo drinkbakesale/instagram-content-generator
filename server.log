@@ -1,0 +1,325 @@
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+127.0.0.1 - - [26/Feb/2026 14:29:36] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:29:36] "GET /api/full-state HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:29:36] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:29:36] "[36mGET /output/post_3_final.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [26/Feb/2026 14:29:36] "[36mGET /output/post_1_final.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [26/Feb/2026 14:30:20] "POST /api/generate-full-post HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:30:59] "POST /api/generate-full-post HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:30:59] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:37:07] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:37:21] "GET /output/post_3_final.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:37:28] "GET /output/post_1_final.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:37:31] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:37:34] "[36mGET /output/post_3_final.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [26/Feb/2026 14:37:39] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:37:42] "GET /api/prompts/image_prompt HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:45:05] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:45:23] "GET /api/prompts/image_prompt HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:55:34] "POST /api/prompts/image_prompt HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:56:26] "POST /api/generate-full-post HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:56:29] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:56:32] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:56:33] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:56:35] "[36mGET /output/post_3_final.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [26/Feb/2026 14:56:40] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:56:46] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:57:08] "POST /api/generate-full-post HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:57:08] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:58:26] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:58:29] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:58:29] "[35m[1mGET /api/full-state HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/site-packages/flask/app.py", line 1478, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/site-packages/flask/app.py", line 1458, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/williamkehler/instagram-content-generator/app.py", line 464, in get_full_state
+    return jsonify({
+           ^^^^^^^^^
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/site-packages/flask/json/__init__.py", line 170, in jsonify
+    return current_app.json.response(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/site-packages/flask/json/provider.py", line 215, in response
+    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/site-packages/flask/json/provider.py", line 180, in dumps
+    return json.dumps(obj, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/json/encoder.py", line 354, in _iterencode_dict
+    items = sorted(dct.items())
+            ^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'int' and 'str'
+127.0.0.1 - - [26/Feb/2026 14:58:31] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:58:31] "GET /output/post_3_final.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:58:31] "GET /output/post_1_final.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:58:33] "GET /output/post_3_final.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:58:38] "[36mGET /output/post_3_final.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [26/Feb/2026 14:58:40] "GET /output/post_1_final.png HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:58:50] "GET /api/prompts/image_prompt HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:59:08] "POST /api/generate-strategy HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:59:18] "POST /api/approve-concepts HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:59:32] "POST /api/generate-copy HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:59:35] "POST /api/approve-copy HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:59:38] "POST /api/approve-copy HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 14:59:39] "POST /api/approve-copy HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:00:19] "POST /api/generate-full-post HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:00:19] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:00:22] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:00:24] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:00:25] "[36mGET /output/post_3_final.png HTTP/1.1[0m" 304 -
+ * Detected change in '/Users/williamkehler/instagram-content-generator/app.py.tmp.23591.1772143429466', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/services/text_overlay.py.tmp.23591.1772143457722', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/services/text_overlay.py.tmp.23591.1772143487370', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/services/text_overlay.py.tmp.23591.1772143499001', reloading
+ * Detected change in '/Users/williamkehler/instagram-content-generator/services/text_overlay.py', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/services/text_overlay.py.tmp.23591.1772143509204', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/services/text_overlay.py.tmp.23591.1772143524270', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/services/text_overlay.py.tmp.23591.1772143532102', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/services/text_overlay.py.tmp.23591.1772143546699', reloading
+ * Detected change in '/Users/williamkehler/instagram-content-generator/services/text_overlay.py', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/services/text_overlay.py.tmp.23591.1772143552870', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/app.py.tmp.23591.1772143595792', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/app.py.tmp.23591.1772143607851', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/app.py.tmp.23591.1772143616541', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/app.py.tmp.23591.1772143625357', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+ * Detected change in '/Users/williamkehler/instagram-content-generator/app.py.tmp.23591.1772143635112', reloading
+
+============================================================
+Instagram Content Generator
+============================================================
+Target website: https://projectruth.net/
+Output directory: /Users/williamkehler/instagram-content-generator/output
+
+Starting server at http://localhost:5001
+============================================================
+
+ * Restarting with watchdog (fsevents)
+ * Debugger is active!
+ * Debugger PIN: 430-381-241
+127.0.0.1 - - [26/Feb/2026 15:20:50] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:20:50] "GET /api/full-state HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:20:50] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:20:53] "GET /api/get-final-grid HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:20:53] "GET /output/post_1_final.png?t=1772144450609 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:20:53] "GET /output/post_3_final.png?t=1772144450609 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:20:53] "GET /output/post_1_final.png?t=1772144453526 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:20:53] "GET /output/post_3_final.png?t=1772144453526 HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 15:20:57] "[36mGET /output/post_1_final.png?t=1772144453526 HTTP/1.1[0m" 304 -
+127.0.0.1 - - [26/Feb/2026 15:21:05] "[36mGET /output/post_3_final.png?t=1772144453526 HTTP/1.1[0m" 304 -
+127.0.0.1 - - [26/Feb/2026 15:21:08] "[36mGET /output/post_1_final.png?t=1772144453526 HTTP/1.1[0m" 304 -
+127.0.0.1 - - [26/Feb/2026 15:22:36] "GET /api/prompts/image_prompt HTTP/1.1" 200 -
+/Users/williamkehler/.pyenv/versions/3.11.8/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

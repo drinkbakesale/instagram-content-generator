@@ -1,0 +1,8 @@
+venv/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+output/*.png
+session_data.json
+imported_photos/
